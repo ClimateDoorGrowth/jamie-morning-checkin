@@ -1,0 +1,34 @@
+name: Jamie Morning Check-in
+
+on:
+  schedule:
+    # 6:00 AM Pacific Time (PT = UTC-7 during PDT, UTC-8 during PST)
+    # Adjust the hour below to match your timezone:
+    #   6am PT  (PDT, UTC-7) → 13:00 UTC → use "0 13 * * *"
+    #   6am PT  (PST, UTC-8) → 14:00 UTC → use "0 14 * * *"
+    #   6am ET  (EDT, UTC-4) → 10:00 UTC → use "0 10 * * *"
+    #   6am UTC              →  6:00 UTC → use "0 6 * * *"
+    - cron: "0 13 * * 1-5"   # Weekdays at 6am PT (PDT)
+  workflow_dispatch:          # Allow manual runs from GitHub Actions UI
+
+jobs:
+  morning-checkin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Run Jamie Morning Check-in
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "Run the /jamie-morning-checkin skill and output the full briefing."
+          allowed_tools: >
+            mcp__Google-Calendar__list_events,
+            mcp__Google-Calendar__list_calendars,
+            mcp__Asana__asana_get_tasks,
+            mcp__Asana__asana_search_tasks,
+            mcp__Gmail__search_threads,
+            mcp__Gmail__get_thread,
+            mcp__Slack__slack_read_channel,
+            mcp__Slack__slack_search_public_and_private
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
