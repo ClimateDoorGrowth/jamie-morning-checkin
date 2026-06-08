@@ -1,0 +1,20 @@
+name: Jamie Morning Check-in
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 6:00 AM UTC daily
+  workflow_dispatch:       # allow manual runs
+
+jobs:
+  morning-checkin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Morning Check-in Skill
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "/jamie-morning-checkin"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
