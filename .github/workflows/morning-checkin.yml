@@ -1,0 +1,20 @@
+name: Jamie Morning Check-in
+
+on:
+  schedule:
+    - cron: '0 11 * * 1-5'  # 6am PT (UTC-5) on weekdays; adjust for your timezone
+  workflow_dispatch:  # allows manual triggering from GitHub Actions tab
+
+jobs:
+  morning-checkin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Jamie Morning Check-in
+        uses: anthropics/claude-code-action@beta
+        with:
+          prompt: "/jamie-morning-checkin"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
