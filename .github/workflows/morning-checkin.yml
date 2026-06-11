@@ -1,0 +1,18 @@
+name: Jamie Morning Check-in
+
+on:
+  schedule:
+    # 6:00 AM UTC — adjust offset for your timezone
+    # e.g. for 6am US/Pacific (UTC-7 summer): change to '0 13 * * *'
+    - cron: '0 6 * * *'
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+jobs:
+  morning-checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Jamie Morning Check-in
+        uses: anthropics/claude-code-action@beta
+        with:
+          prompt: "/jamie-morning-checkin"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
