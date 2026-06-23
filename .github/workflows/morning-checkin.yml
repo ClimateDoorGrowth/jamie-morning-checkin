@@ -1,0 +1,25 @@
+name: Jamie Morning Check-in
+
+on:
+  schedule:
+    # 6am ET (11:00 UTC, or 10:00 UTC during daylight saving)
+    # Adjust the hour to match your local timezone:
+    #   PT (UTC-8/-7): use 14 or 13
+    #   CT (UTC-6/-5): use 12 or 11
+    #   ET (UTC-5/-4): use 11 or 10
+    - cron: '0 11 * * 1-5'  # Weekdays only — change to '* *' for every day
+  workflow_dispatch:  # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  morning-checkin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run morning check-in skill
+        uses: anthropics/claude-code-action@beta
+        with:
+          prompt: "Run the /jamie-morning-checkin skill. When done, send a push notification with the full morning briefing."
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
