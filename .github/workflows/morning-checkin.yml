@@ -1,0 +1,30 @@
+name: Jamie Morning Check-In
+
+on:
+  schedule:
+    # 6am ET daily (10am UTC in EDT / 11am UTC in EST)
+    # Runs Monday-Friday; adjust day-of-week field if weekends are needed
+    - cron: '3 10 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  morning-checkin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Jamie Morning Check-In
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: "/jamie-morning-check-in"
+          # MCP servers with OAuth (Gmail, Google Calendar, Asana, Notion) require
+          # the user's OAuth tokens. For those, run this via Claude Code on the web
+          # (code.claude.com) with a scheduled session trigger instead — it has
+          # direct access to your connected MCP servers.
+          #
+          # To use the GitHub Actions path, add each service's API credentials
+          # as repository secrets and configure them below via mcp_config.
+          allowed_tools: "Bash,Read,Glob,Grep"
